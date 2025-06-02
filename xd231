@@ -1,0 +1,54 @@
+from mcpi.minecraft import Minecraft
+from mcpi import block
+import time
+import random
+
+mc = Minecraft.create()
+
+# 🧍 Gracz jako centrum akcji
+pos = mc.player.getTilePos()
+x, y, z = pos.x, pos.y, pos.z
+
+# === 1. MAGICZNY KRĄG z REDSTONE ===
+radius = 5
+for angle in range(0, 360, 10):
+    rad = angle * 3.14 / 180
+    px = int(x + radius * math.cos(rad))
+    pz = int(z + radius * math.sin(rad))
+    mc.setBlock(px, y, pz, block.REDSTONE_BLOCK.id)
+
+mc.postToChat("🧙‍♂️ Przyzwanie rozpoczęte...")
+
+time.sleep(1)
+
+# === 2. DESZCZ PŁONĄCYCH BLOKÓW ===
+for i in range(10):
+    fx = x + random.randint(-3, 3)
+    fz = z + random.randint(-3, 3)
+    fy = y + 15
+
+    # Upuszczanie ognistych bloków (np. NETHERRACK + fire)
+    mc.setBlock(fx, fy, fz, block.NETHERRACK.id)
+    mc.setBlock(fx, fy + 1, fz, block.FIRE.id)
+    time.sleep(0.2)
+
+mc.postToChat("🔥 Krąg aktywowany!")
+
+# === 3. WIEŻA ZE ŚWIATŁA ===
+for i in range(5):
+    mc.setBlock(x, y + i, z, block.GLOWSTONE_BLOCK.id)
+    time.sleep(0.1)
+
+# === 4. AGENT i ZNAK DIAMENTU ===
+# Teleport agent do środka
+mc.executeCommand(f"agent teleport to {x} {y+1} {z}")
+time.sleep(1)
+
+# Diamentowe "X" pod agentem
+mc.setBlock(x-1, y, z-1, block.DIAMOND_BLOCK.id)
+mc.setBlock(x+1, y, z-1, block.DIAMOND_BLOCK.id)
+mc.setBlock(x,   y, z,   block.DIAMOND_BLOCK.id)
+mc.setBlock(x-1, y, z+1, block.DIAMOND_BLOCK.id)
+mc.setBlock(x+1, y, z+1, block.DIAMOND_BLOCK.id)
+
+mc.postToChat("💎 AGENT PRZYWOŁANY!")
