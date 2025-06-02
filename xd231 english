@@ -1,0 +1,55 @@
+from mcpi.minecraft import Minecraft
+from mcpi import block
+import time
+import math
+import random
+
+mc = Minecraft.create()
+
+# 🧍 Get player's position
+pos = mc.player.getTilePos()
+x, y, z = pos.x, pos.y, pos.z
+
+# === 1. REDSTONE MAGIC CIRCLE ===
+radius = 5
+for angle in range(0, 360, 10):
+    rad = math.radians(angle)
+    px = int(x + radius * math.cos(rad))
+    pz = int(z + radius * math.sin(rad))
+    mc.setBlock(px, y, pz, block.REDSTONE_BLOCK.id)
+
+mc.postToChat("🧙‍♂️ Summoning ritual begins...")
+
+time.sleep(1)
+
+# === 2. FIRE RAIN EFFECT ===
+for i in range(10):
+    fx = x + random.randint(-3, 3)
+    fz = z + random.randint(-3, 3)
+    fy = y + 15
+
+    # Drop flaming Netherrack blocks
+    mc.setBlock(fx, fy, fz, block.NETHERRACK.id)
+    mc.setBlock(fx, fy + 1, fz, block.FIRE.id)
+    time.sleep(0.2)
+
+mc.postToChat("🔥 The circle is now activated!")
+
+# === 3. GLOWSTONE LIGHT TOWER ===
+for i in range(5):
+    mc.setBlock(x, y + i, z, block.GLOWSTONE_BLOCK.id)
+    time.sleep(0.1)
+
+# === 4. AGENT SUMMON + DIAMOND SIGN ===
+# Teleport agent to the center of the circle
+mc.executeCommand(f"agent teleport to {x} {y+1} {z}")
+time.sleep(1)
+
+# Diamond "X" under the Agent
+mc.setBlock(x - 1, y, z - 1, block.DIAMOND_BLOCK.id)
+mc.setBlock(x + 1, y, z - 1, block.DIAMOND_BLOCK.id)
+mc.setBlock(x,     y, z,     block.DIAMOND_BLOCK.id)
+mc.setBlock(x - 1, y, z + 1, block.DIAMOND_BLOCK.id)
+mc.setBlock(x + 1, y, z + 1, block.DIAMOND_BLOCK.id)
+
+mc.postToChat("💎 Agent has been summoned!")
