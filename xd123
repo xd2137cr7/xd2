@@ -1,0 +1,32 @@
+from minecraftstuff import MinecraftShape
+from mcpi.minecraft import Minecraft
+from mcpi import block
+import time
+
+mc = Minecraft.create()
+
+# Pobierz pozycję gracza
+pos = mc.player.getTilePos()
+
+# Kierunek – załóżmy, że gracz patrzy w osi Z
+# (jeśli nie, to można dodać detekcję kierunku)
+x = pos.x
+y = pos.y
+z = pos.z + 5  # 5 kratek przed graczem
+
+# Wyczyść miejsce na napis
+mc.setBlocks(x, y, z, x + 4, y + 4, z, block.AIR)
+
+# Zbuduj literę "x"
+mc.setBlock(x, y, z, block.STONE)
+mc.setBlock(x+1, y+1, z, block.STONE)
+mc.setBlock(x+2, y+2, z, block.STONE)
+mc.setBlock(x+3, y+1, z, block.STONE)
+mc.setBlock(x+4, y, z, block.STONE)
+
+# Zbuduj literę "d"
+mc.setBlock(x+6, y, z, block.STONE)
+mc.setBlock(x+6, y+1, z, block.STONE)
+mc.setBlock(x+6, y+2, z, block.STONE)
+mc.setBlock(x+7, y+1, z, block.STONE)
+mc.setBlock(x+7, y+2, z, block.STONE)
